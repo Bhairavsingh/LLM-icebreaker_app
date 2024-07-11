@@ -2,11 +2,17 @@
 
 # Required Packages.
 from dotenv import load_dotenv
-import os
 
 from langchain.prompts.prompt import PromptTemplate
 from langchain_openai import ChatOpenAI
-from linkedin import linkedin_scraper
+from langchain.chains import LLMChain
+from external_bots.linkedin import linkedin_scraper
+from agent.linkedin_lookup_agent import lookup as linkedin_lookup_agent
+
+
+# Function for
+def ice_breaker_with(name: str):
+    pass
 
 
 if __name__ == "__main__":
