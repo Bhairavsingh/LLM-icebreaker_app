@@ -2,17 +2,16 @@
 
 # Required Packages.
 from dotenv import load_dotenv
-
+from typing import Tuple, Any
 from langchain.prompts.prompt import PromptTemplate
 from langchain_openai import ChatOpenAI
-from langchain.chains import LLMChain
 from external_bots.linkedin import linkedin_scraper
 from agent.linkedin_lookup_agent import lookup as linkedin_lookup_agent
-from output_parser import summary_parser
+from output_parser import summary_parser, Summary
 
 
 # Function for
-def ice_breaker_with(name: str):
+def ice_breaker_with(name: str) -> Tuple[Summary, str]:
     linkedin_url = linkedin_lookup_agent(name=name)
     linkedin_information = linkedin_scraper(linkedin_profile_link=linkedin_url)
 
@@ -31,7 +30,7 @@ def ice_breaker_with(name: str):
     chain = summary_prompt_template | llm | summary_parser
     res = chain.invoke(input={"information": linkedin_information})
 
-    return res
+    return res, linkedin_information.get("profile_pic_url")
 
 
 if __name__ == "__main__":
@@ -39,8 +38,8 @@ if __name__ == "__main__":
 
     print("Ice Breaker!")
 
-    result = ice_breaker_with(name='Nicholas Salter Space Cow')
-
+    result, pic = ice_breaker_with(name='Nicholas Salter Space Cow')
+    print(result.to_dict())
     print(result.summary)
     print(result.facts)
 
